@@ -27,7 +27,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                bat 'docker build -t %IMAGE_NAME%:%BUILD_NUMBER% .'
+                 bat 'docker build -t %IMAGE_NAME%:%BUILD_NUMBER% -f public/Dockerfile .'
             }
         }
 
