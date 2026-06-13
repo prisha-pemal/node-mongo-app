@@ -3,7 +3,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "dockerhubuser/nodeapp"
+        IMAGE_NAME = "larudhanu/nodeapp"
         CONTAINER_NAME = "nodeapp"
     }
 
