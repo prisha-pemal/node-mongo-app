@@ -31,20 +31,58 @@ pipeline {
             }
         }
 
-        stage('Debug Docker User') {
-    steps {
-        withCredentials([
-            usernamePassword(
-                credentialsId: 'dockerhub-creds',
-                usernameVariable: 'DOCKER_USER',
-                passwordVariable: 'DOCKER_PASS'
-            )
-        ]) {
-            bat '''
-            echo USER=%DOCKER_USER%
-            '''
+        stages {
+
+    stage('Install Dependencies') {
+        steps {
+            bat 'npm install'
         }
     }
+
+    stage('Run Tests') {
+        steps {
+            bat 'npm test'
+        }
+    }
+
+    stage('Build Docker Image') {
+        steps {
+            bat 'docker build -t %IMAGE_NAME%:%BUILD_NUMBER% -f public/Dockerfile .'
+        }
+    }
+
+    stage('Check Docker User') {
+        steps {
+            withCredentials([
+                usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )
+            ]) {
+                bat '''
+                echo USER=%DOCKER_USER%
+                '''
+            }
+        }
+    }
+
+    stage('Docker Login') {
+        steps {
+            withCredentials([
+                usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )
+            ]) {
+                bat '''
+                echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin
+                '''
+            }
+        }
+    }
+
 }
 
         stage('Docker Login') {
