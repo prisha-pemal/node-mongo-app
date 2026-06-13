@@ -27,7 +27,24 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                 bat 'docker build -t %IMAGE_NAME%:%BUILD_NUMBER% -f public/Dockerfile .'
+                bat 'docker build -t %IMAGE_NAME%:%BUILD_NUMBER% -f public/Dockerfile .'
+            }
+        }
+
+        // DEBUG STAGE
+        stage('Check Docker User') {
+            steps {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'dockerhub-creds',
+                        usernameVariable: 'DOCKER_USER',
+                        passwordVariable: 'DOCKER_PASS'
+                    )
+                ]) {
+                    bat '''
+                    echo USER=%DOCKER_USER%
+                    '''
+                }
             }
         }
 
@@ -87,4 +104,3 @@ pipeline {
         }
     }
 }
-
