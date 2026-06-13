@@ -31,7 +31,6 @@ pipeline {
             }
         }
 
-        // DEBUG STAGE
         stage('Check Docker User') {
             steps {
                 withCredentials([
@@ -57,8 +56,8 @@ pipeline {
                         passwordVariable: 'DOCKER_PASS'
                     )
                 ]) {
-
                     bat '''
+                    docker logout
                     echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin
                     '''
                 }
@@ -73,7 +72,6 @@ pipeline {
 
         stage('Deploy') {
             steps {
-
                 bat '''
                 docker stop %CONTAINER_NAME%
                 '''
