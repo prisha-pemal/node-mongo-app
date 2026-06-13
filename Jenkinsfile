@@ -31,6 +31,22 @@ pipeline {
             }
         }
 
+        stage('Debug Docker User') {
+    steps {
+        withCredentials([
+            usernamePassword(
+                credentialsId: 'dockerhub-creds',
+                usernameVariable: 'DOCKER_USER',
+                passwordVariable: 'DOCKER_PASS'
+            )
+        ]) {
+            bat '''
+            echo USER=%DOCKER_USER%
+            '''
+        }
+    }
+}
+
         stage('Docker Login') {
             steps {
                 withCredentials([
