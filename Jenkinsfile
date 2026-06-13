@@ -23,7 +23,7 @@ pipeline {
             steps {
 
                 git branch: 'main',
-                url: 'https://github.com/user/node-mongo-cicd.git'
+                url: 'https://github.com/prisha-pemal/node-mongo-app.git'
 
             }
         }
