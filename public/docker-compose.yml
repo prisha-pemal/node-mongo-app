@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+
+  mongodb:
+    image: mongo:7
+    container_name: mongodb
+
+    volumes:
+      - mongo_data:/data/db
+
+    restart: always
+
+  nodeapp:
+    build: .
+
+    ports:
+      - "3000:3000"
+
+    depends_on:
+      - mongodb
+
+    restart: always
+
+volumes:
+  mongo_data:
