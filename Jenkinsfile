@@ -47,22 +47,24 @@ pipeline {
             }
         }
 
-        stage('Docker Login') {
-            steps {
-                withCredentials([
-                    usernamePassword(
-                        credentialsId: 'dockerhub-creds',
-                        usernameVariable: 'DOCKER_USER',
-                        passwordVariable: 'DOCKER_PASS'
-                    )
-                ]) {
-                    bat '''
-                    docker logout
-                    echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin
-                    '''
-                }
-            }
+      stage('Docker Login') {
+       steps {
+          withCredentials([
+            usernamePassword(
+                credentialsId: 'dockerhub-creds',
+                usernameVariable: 'DOCKER_USER',
+                passwordVariable: 'DOCKER_PASS'
+            )
+        ]) {
+
+            writeFile file: 'dockerpass.txt', text: env.DOCKER_PASS
+
+            bat '''
+            type dockerpass.txt | docker login -u %DOCKER_USER% --password-stdin
+            '''
         }
+    }
+}
 
         stage('Push Image') {
             steps {
