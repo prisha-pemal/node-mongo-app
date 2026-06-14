@@ -9,7 +9,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 
 mongoose.connect(
-'mongodb://localhost:27017/userdb'
+'mongoose.connect('mongodb://mongodb:27017/mydb')'
 );
 
 const userRoute = require('./routes/user');
