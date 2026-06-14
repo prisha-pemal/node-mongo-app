@@ -72,21 +72,15 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
-            steps {
-                bat '''
-                docker stop %CONTAINER_NAME%
-                '''
-
-                bat '''
-                docker rm %CONTAINER_NAME%
-                '''
-
-                bat '''
-                docker run -d --name %CONTAINER_NAME% -p 3000:3000 %IMAGE_NAME%:%BUILD_NUMBER%
-                '''
-            }
-        }
+       stage('Deploy') {
+         steps {
+          bat '''
+           docker stop %CONTAINER_NAME% 2>nul
+           docker rm %CONTAINER_NAME% 2>nul
+           docker run -d --name %CONTAINER_NAME% -p 3000:3000 %IMAGE_NAME%:%BUILD_NUMBER%
+        '''
+    }
+}
     }
 
     post {
