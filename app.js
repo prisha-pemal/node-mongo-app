@@ -13,7 +13,7 @@ app.use((req, res, next) => {
     next();
 });
 
-// MongoDB Connection
+// MongoDB 
 mongoose.connect('mongodb://host.docker.internal:27017/mydb')
 .then(() => {
     console.log('MongoDB Connected');
