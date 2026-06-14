@@ -5,8 +5,13 @@ const bodyParser = require('body-parser');
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
-
 app.set('view engine', 'ejs');
+
+// Request Logger
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.url}`);
+    next();
+});
 
 // MongoDB Connection
 mongoose.connect('mongodb://host.docker.internal:27017/mydb')
@@ -17,11 +22,17 @@ mongoose.connect('mongodb://host.docker.internal:27017/mydb')
     console.error('MongoDB Connection Error:', err);
 });
 
-const userRoute = require('./routes/user');
+// Test Route
+app.get('/test', (req, res) => {
+    res.send('TEST OK');
+});
 
+const userRoute = require('./routes/user');
 app.use('/', userRoute);
 
+// Home Route
 app.get('/', (req, res) => {
+    console.log('Rendering index.ejs');
     res.render('index');
 });
 
